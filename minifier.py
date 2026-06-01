@@ -41,7 +41,8 @@ C_KEYWORDS = {
     "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary", "_Noreturn",
     "_Static_assert", "_Thread_local", "include", "define", "undef",
     "ifdef", "ifndef", "endif", "elif", "pragma", "error", "line",
-    "printf", "scanf", "strlen", "main", "NULL", "EOF", "stdin", "stdout", "stderr"
+    "printf", "scanf", "strlen", "main", "NULL", "EOF", "stdin", "stdout", "stderr",
+    "solve" # Protected so the AI knows where the logic starts
 }
 
 
@@ -235,6 +236,36 @@ def replace_identifiers(minified_txt):
     return minified_txt
 
 
+def strip_fast_io(minified_txt):
+    """Removes common C++ fast I/O boilerplate which AI doesn't need to read."""
+    io_patterns = [
+        r'ios_base::sync_with_stdio\([^)]*\);?',
+        r'cin\.tie\([^)]*\);?',
+        r'cout\.tie\([^)]*\);?'
+    ]
+    for pattern in io_patterns:
+        minified_txt = re.sub(pattern, '', minified_txt)
+    return minified_txt
+
+
+def collapse_cp_main(minified_txt):
+    """
+    Finds standard CP main loops and replaces them with a tiny pseudo-code tag.
+    Detects if there is a 't' loop or just a single run.
+    """
+    # Pattern for multiple test cases: while(...) { solve(); }
+    pattern_n = re.compile(r'int main\(\)\{.*?while\([^)]+\)\{?solve\(\);?\}?.*?return 0;\}')
+    if pattern_n.search(minified_txt):
+        return pattern_n.sub('[MAIN: loop t:n -> solve()]', minified_txt)
+        
+    # Pattern for single test case: solve();
+    pattern_1 = re.compile(r'int main\(\)\{.*?solve\(\);?.*?return 0;\}')
+    if pattern_1.search(minified_txt):
+        return pattern_1.sub('[MAIN: loop t:1 -> solve()]', minified_txt)
+        
+    return minified_txt
+
+
 def minify_source(orig_source, args=None):
     keep_newlines = getattr(args, 'keep_newlines', False)
     keep_multiline_comments = getattr(args, 'keep_multiline', False)
@@ -265,11 +296,15 @@ def minify_source(orig_source, args=None):
         minified = fix_duplicate_newlines(''.join(lines))
 
     minified = fix_spaced_ops(minified)
+    minified = strip_fast_io(minified)
     minified = collapse_includes(minified)
+    
+    # Run replacement FIRST so the custom [MAIN] tags aren't modified
     minified = replace_identifiers(minified)
+    minified = collapse_cp_main(minified)
 
     # ADD THE AI PROMPT PREAMBLE HERE
-    ai_preamble = "System Instruction: This is minified C code. To save tokens, includes are formatted as an array and variables > 3 chars are replaced with short names. The mapping is below. Please read this code and stand by for questions.\n\n"
+    ai_preamble = "System Instruction: This is minified CP code. Includes are an array, CP boilerplate main() is collapsed, and variables > 3 chars are replaced. The mapping is below. Focus on `solve()`, it's the main entry point to logic. Please read this code and stand by for questions.\n\n"
     minified = ai_preamble + minified
 
     return minified
