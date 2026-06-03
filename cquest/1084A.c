@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <limits.h>
 
-#define MOD(a) (a)<0?-1*(a):(a)
+#define MOD(a) ((a)<0?-1*(a):(a))
 #define MIN(a,b) (a)<(b)?(a):(b)
 
 int main()
@@ -34,18 +34,14 @@ int main()
         int sum = 0;
         for (int i = 1; i <= n; i++)
         {
-            int x2i = MOD(x - i);
-            int i21 = MOD(i - 1);
-            int x21 = MOD(x - 1);
-            int tans = 2 * (x2i + i21 + x21);
+            int tans = 2 * (MOD(x - i) + MOD(i - 1) + MOD(x - 1));
             int cost = arr[i]  * tans;
             sum += cost;
-            /* printf("\tDEBUG: %d,%d: %d %d %d\n",i, x, x2i,i21,x21); */
-            /* printf("\tDEBUG: %d,%d: %d * %d = %d\n",i, x, tans, arr[i], cost); */
+            printf("\tDEBUG: %d,%d: %d * %d = %d\n",i, x, tans, arr[i], cost);
         }         
 
-        /* printf("DEBUG: sum = %d\n",sum); */
-        /* printf("--------------------------------\n"); */
+        printf("DEBUG: sum = %d\n",sum);
+        printf("--------------------------------\n");
         ans = MIN(ans, sum);
     }
 
