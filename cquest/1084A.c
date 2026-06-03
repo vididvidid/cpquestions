@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <limits.h>
 
-#define MOD(a) ((a)<0?-1*(a):(a))
+#define MOD(a) (((a)<0?-1*(a):(a)))
 #define MIN(a,b) (a)<(b)?(a):(b)
 
 int main()
