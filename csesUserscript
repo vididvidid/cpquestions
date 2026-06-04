@@ -1,0 +1,213 @@
+/*
+ * File: csesUserscript
+ * Author: vididvidid 
+ * Created: 2026-06-04 07:53:58
+ */
+
+// ==UserScript==
+// @name         CSES Problem Notes
+// @namespace    http://tampermonkey.net/
+// @version      1.5
+// @description  Persistent notes column with a simple, solid white pop-up editor.
+// @author       vididvidid
+// @match        https://cses.fi/problemset*
+// @match        https://cses.fi/problemset/list*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=cses.fi
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // 1. Check saved toggle state (default to true)
+    const savedState = localStorage.getItem('cses_notes_toggle');
+    let isNotesEnabled = savedState !== null ? savedState === 'true' : true;
+
+    if (isNotesEnabled) {
+        document.body.classList.add('cses-notes-active');
+    }
+
+    // 2. Inject Basic CSS
+    const style = document.createElement('style');
+    style.innerHTML = `
+        /* --- Basic Toggle Button --- */
+        #cses-notes-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px;
+            background: white;
+            color: black;
+            border: 1px solid black;
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        /* --- List Alignment --- */
+        body.cses-notes-active .task-list .task {
+            display: flex; align-items: center; justify-content: space-between; padding: 4px 0;
+        }
+        body.cses-notes-active .task-list .task > a { flex: 0 0 30%; min-width: 250px; }
+        body.cses-notes-active .task-list .task > .detail { flex: 0 0 15%; margin-right: 10px; }
+        body.cses-notes-active .task-list .task > .task-score { flex: 0 0 20px; }
+
+        /* --- Inline Input --- */
+        .cses-note-wrapper { display: none; }
+        body.cses-notes-active .cses-note-wrapper {
+            display: block; flex: 1; position: relative; margin: 0 15px;
+        }
+        .cses-custom-note {
+            width: 100%; padding: 2px 25px 2px 4px; border: 1px solid gray; box-sizing: border-box;
+        }
+        .cses-expand-btn {
+            position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+            cursor: pointer; color: black; font-weight: bold; font-family: sans-serif;
+        }
+
+        /* --- SIMPLE WHITE POPUP BOX --- */
+        #cses-note-modal {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.4); /* Slight dimming of the background page */
+            z-index: 10000;
+            align-items: center; justify-content: center;
+        }
+        .cses-modal-box {
+            background: white;
+            color: black;
+            border: 2px solid black;
+            width: 90%; max-width: 600px;
+            padding: 15px;
+            display: flex; flex-direction: column;
+            box-sizing: border-box;
+        }
+        .cses-modal-header {
+            display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; font-family: sans-serif;
+        }
+        .cses-modal-close {
+            background: none; border: none; color: black; font-size: 20px; font-weight: bold; cursor: pointer;
+        }
+        .cses-modal-box textarea {
+            background: white; color: black; border: 1px solid gray;
+            width: 100%; height: 250px; padding: 10px; box-sizing: border-box;
+            font-family: monospace; resize: vertical;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // 3. Create Toggle Button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'cses-notes-toggle';
+    toggleBtn.innerHTML = isNotesEnabled ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+
+    toggleBtn.addEventListener('click', () => {
+        isNotesEnabled = !isNotesEnabled;
+        localStorage.setItem('cses_notes_toggle', isNotesEnabled);
+        if (isNotesEnabled) {
+            document.body.classList.add('cses-notes-active');
+            toggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        } else {
+            document.body.classList.remove('cses-notes-active');
+            toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+        }
+    });
+    document.body.appendChild(toggleBtn);
+
+    // 4. Create the Simple White Popup
+    const modal = document.createElement('div');
+    modal.id = 'cses-note-modal';
+
+    const modalContent = document.createElement('div');
+    modalContent.className = 'cses-modal-box';
+
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'cses-modal-header';
+    const modalTitle = document.createElement('span');
+    modalTitle.innerText = 'Problem Notes';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'cses-modal-close';
+    closeBtn.innerHTML = '&times;'; // Cross button
+
+    const bigTextarea = document.createElement('textarea');
+
+    let currentActiveInput = null;
+    let currentStorageKey = null;
+
+    const closeModal = () => {
+        modal.style.display = 'none';
+        currentActiveInput = null;
+        currentStorageKey = null;
+    };
+
+    closeBtn.onclick = closeModal;
+    modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+    bigTextarea.addEventListener('input', (e) => {
+        const text = e.target.value;
+        if (currentActiveInput) currentActiveInput.value = text;
+
+        if (currentStorageKey) {
+            if (text.trim() === '') localStorage.removeItem(currentStorageKey);
+            else localStorage.setItem(currentStorageKey, text);
+        }
+    });
+
+    modalHeader.appendChild(modalTitle);
+    modalHeader.appendChild(closeBtn);
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(bigTextarea);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+
+    // 5. Inject small inputs into the task list
+    const tasks = document.querySelectorAll('.task-list li.task');
+
+    tasks.forEach(task => {
+        const link = task.querySelector('a');
+        if (!link) return;
+
+        const taskIdMatch = link.href.match(/\/task\/(\d+)/);
+        if (!taskIdMatch) return;
+
+        const taskId = taskIdMatch[1];
+        const problemName = link.innerText.trim();
+        const storageKey = `cses_note_${taskId}`;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'cses-note-wrapper';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'cses-custom-note';
+
+        const expandIcon = document.createElement('span');
+        expandIcon.className = 'cses-expand-btn';
+        expandIcon.innerHTML = '&#x26F6;'; // Standard unicode expand symbol instead of fontawesome
+        expandIcon.title = 'Open Popup';
+
+        const savedNote = localStorage.getItem(storageKey);
+        if (savedNote) input.value = savedNote;
+
+        input.addEventListener('input', (e) => {
+            const noteText = e.target.value.trim();
+            if (noteText === '') localStorage.removeItem(storageKey);
+            else localStorage.setItem(storageKey, noteText);
+        });
+
+        expandIcon.addEventListener('click', () => {
+            currentActiveInput = input;
+            currentStorageKey = storageKey;
+            modalTitle.innerText = problemName;
+            bigTextarea.value = input.value;
+            modal.style.display = 'flex';
+            bigTextarea.focus();
+        });
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(expandIcon);
+
+        const iconSpan = task.querySelector('.task-score');
+        task.insertBefore(wrapper, iconSpan);
+    });
+})();
