@@ -64,9 +64,9 @@ def merge_source(entry_file):
     # Assemble the final flat file content
     final_output = []
     for header in sorted(system_headers):
-        final_output.append(header)
+        final_output.append(header + "\n")
     
-    final_output.append("")
+    final_output.append("\n")
     final_output.extend(merged_lines)
 
     return "".join(final_output)
