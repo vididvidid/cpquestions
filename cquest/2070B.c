@@ -21,7 +21,7 @@ void solve()
 
    for (int i = 0; i < n; i++)
    {
-       if (s[i] = 'L') curr--;
+       if (s[i] == 'L') curr--;
        else curr++;
 
        if (curr == 0)
@@ -62,10 +62,10 @@ void solve()
    printf("%lld\n",ans);
 }
 
-int main()
+signed main()
 {
     int t;
-    scanf("%d",&t);
+    scanf("%lld",&t);
     while (t--)
     {
         solve();
