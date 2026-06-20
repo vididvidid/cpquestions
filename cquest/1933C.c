@@ -24,8 +24,7 @@ void solve()
 {
     int a, b, l;
     scanf("%lld %lld %lld", &a, &b, &l);
-    int arr[l+1];
-    for (int i = 0; i <= l; i++) arr[i] = 0;
+    int arr[1000];
 
     int mxx = mx(l, a);
     int mxy = mx(l, b);
@@ -39,12 +38,21 @@ void solve()
             int k = (int)round(pow(a,i)) * (int)round(pow(b, j));
             if (k > 0 && k <= l && l % k == 0)
             {
-                if (!arr[l/k])
+                int val = l / k;
+                int flag = 0;
+                for (int m = 0; m < ans; m++)
                 {
-                    ans++;
-                    arr[l/k] = 1;
+                    if (arr[m] == val)
+                    {
+                        flag = 1;
+                        break;
+                    }
+                }
 
-                    /* printf("%lld %lld %lld\n", l/k, i,j ); */
+                if (!flag)
+                {
+                    arr[ans] = val;
+                    ans++;
                 }
             }
         }
