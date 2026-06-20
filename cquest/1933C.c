@@ -1,0 +1,65 @@
+/*
+ * File: 1933C.c
+ * Author: vididvidid 
+ * Created: 2026-06-20 10:58:15
+ */
+
+/*
+ * find all the possibel combination l = k * a ^ x * b ^y is valid
+ *
+ * max value of x when y = 0 is x = [ log base a (l) ]
+ */
+
+#include <stdio.h>
+#include <math.h>
+
+#define int long long
+
+int mx(int l, int b)
+{
+    return (int)floor(log((double)l) / log((double)b));
+}
+
+void solve()
+{
+    int a, b, l;
+    scanf("%lld %lld %lld", &a, &b, &l);
+    int arr[l+1];
+    for (int i = 0; i <= l; i++) arr[i] = 0;
+
+    int mxx = mx(l, a);
+    int mxy = mx(l, b);
+
+    int ans = 0;
+
+    for (int i = 0; i <= mxx; i++)
+    {
+        for (int j = 0; j <= mxy; j++)
+        {
+            int k = pow(a,i) * pow(b, j);
+            if (l % k == 0)
+            {
+                if (!arr[l/k])
+                {
+                    ans++;
+                    arr[l/k] = 1;
+
+                    /* printf("%lld %lld %lld\n", l/k, i,j ); */
+                }
+            }
+        }
+    }
+
+    printf("%lld\n", ans);
+}
+
+signed main()
+{
+    int t;
+    scanf("%lld ", &t);
+    while (t--)
+    {
+        solve();
+    }
+    return 0;
+}
