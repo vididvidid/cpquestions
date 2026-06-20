@@ -17,7 +17,7 @@
 
 int mx(int l, int b)
 {
-    return (int)floor(log((double)l) / log((double)b));
+    return (int)floor(log((double)l) / log((double)b) + 1e-9);
 }
 
 void solve()
@@ -36,8 +36,8 @@ void solve()
     {
         for (int j = 0; j <= mxy; j++)
         {
-            int k = pow(a,i) * pow(b, j);
-            if (l % k == 0)
+            int k = (int)round(pow(a,i)) * (int)round(pow(b, j));
+            if (k > 0 && k <= l && l % k == 0)
             {
                 if (!arr[l/k])
                 {
