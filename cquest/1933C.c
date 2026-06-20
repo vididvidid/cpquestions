@@ -24,7 +24,7 @@ void solve()
 {
     int a, b, l;
     scanf("%lld %lld %lld", &a, &b, &l);
-    int arr[1000];
+    int arr[405];
 
     int mxx = mx(l, a);
     int mxy = mx(l, b);
