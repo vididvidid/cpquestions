@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MAX(a,b) (a)>(b)?(a):(b)
 void solve()
 {
     int n;
@@ -23,47 +24,28 @@ void solve()
     scanf("%s", s);
     int k;
     scanf("%d", &k);
-    int mx1 = 0, mx2 = -1;
+    char sp[k];
     for (int i = 0; i < k; i++)
     {
-        char c;
-        scanf(" %c", &c);
-        char *ptr = strrchr(s, c);
-        printf("PRINT: idx = %td\n", ptr - s);
-        if (ptr) {
-            int idx = ptr - s ;
-            if (mx1 < idx)
+        scanf(" %c", &sp[i]);
+    }
+    
+    int last_idx = 0, ans = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < k; j++)
+        {
+            if (s[i] == sp[j])
             {
-                mx2 = mx1;
-                mx1 = idx;
-            }
-            else if (mx2 < mx1 && mx2 < idx)
-            {
-                mx2 = idx;
+                int idx = i - last_idx;
+                ans = MAX(ans, idx);
+                last_idx = i;
             }
         }
-        printf("PRINT: mx1 > %d and mx2 > %d\n",mx1, mx2);
     }
-    
-    if (mx1 > 0 && mx2 == 0)
-    {
-        printf("%d\n",mx1);
-    }
-    else if (mx1 > 0 && mx2 > 0 && mx1 - mx2 > 1)
-    {
-        printf("%d\n",mx1 - mx2 - 1);
-    }
-    else if (mx1 > 0 && mx2 > 0)
-    {
-        printf("%d\n",mx1 - mx2);
-    }
-    else
-    {
-        printf("0\n");
-    }
-
-    
+    printf("%d\n",ans);
 }
+
 
 int main()
 {
