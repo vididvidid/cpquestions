@@ -24,7 +24,7 @@ void solve()
         }
     }
 
-    printf("No\n");
+    printf("NO\n");
 }
 
 signed main()
