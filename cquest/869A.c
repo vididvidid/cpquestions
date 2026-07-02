@@ -5,60 +5,29 @@
  */
 
 #include <stdio.h>
-
+int trr[2000005];
 void solve()
 {
     int n;
     scanf("%d",&n);
     int arr[n], prr[n];
-    for (int i = 0; i < n; i++) scanf("%d", &arr[i]);
-    for (int i = 0; i < n; i++) scanf("%d", &prr[i]);
+    for (int i = 0; i < n; i++) scanf("%d", &arr[i]), trr[arr[i]] = 1;
+    for (int i = 0; i < n; i++) scanf("%d", &prr[i]), trr[prr[i]] = 1;
 
-/*     if (n  == 1) */
-/*     { */
-/*         if (arr[0] != 0 && arr[0] % 2 == 0) */ 
-/*         { */
-/*             printf("Koyomi\n"); */
-/*         } */
-/*         else { */
-/*             printf("Karen\n"); */
-/*         } */
-/*         return; */
-/*     } */
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0 ;j < n; j++)
+        {
+            int val = arr[i] ^ prr[j];
+            if (val <= 2000000 && trr[val])
+            {
+                cnt++;
+            }
+        }
+    }
 
-/*     int ca = 0, cb = 0; */
-/*     for (int i = 0; i < n; i++) */
-/*     { */
-/*         for (int j = 0; j < n; j++) */
-/*         { */
-/*             int num = arr[i] ^ prr[j]; */
-/*             for (int k = 0; k < n; k++) */
-/*             { */
-/*                 if (num == arr[k]) */
-/*                 { */
-/*                     ca++; */
-/*                     break; */
-/*                 } */
-/*                 if (num == prr[k]) */
-/*                 { */
-/*                     cb++; */
-/*                     break; */
-/*                 } */        
-/*             } */
-/*         } */
-/*     } */
-    
-/*     /1* printf("%d %d\n",ca,cb); *1/ */
-   
-/*     if (ca != 0 && ca % 2 == 0) */
-/*     { */
-/*         printf("Koyomi\n"); */
-/*     } */
-/*     if (cb != 0 && cb % 2 == 0) */
-/*     { */
-/*         printf("Karen\n"); */
-/*     } */
-    printf("Karen\n");
+    printf(cnt % 2 ? "Koyomi\n" : "Karen\n");
 }
 
 int main()
