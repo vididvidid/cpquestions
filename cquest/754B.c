@@ -6,101 +6,62 @@
 
 #include <stdio.h>
 
+int valid (char a, char b, char c)
+{
+    int x = 0, dot = 0;
+
+    x += (a == 'x');
+    x += (b == 'x');
+    x += (c == 'x');
+
+    dot += (a == '.');
+    dot += (b == '.');
+    dot += (c == '.');
+
+    return (x == 2 && dot == 1);
+}
+
 void solve()
 {
     int n = 4;
     char s[4][4];
     for (int i = 0; i < 4; i++) scanf("%s", s[i]);
-    
-    int flag = 0;
-    // left diagonal, right diagonal, horizontal, vertical
-    // horizontal
-    if (!flag)
+
+    int dx[] = {0, 1, 1, 1};
+    int dy[] = {1, 0, 1, -1};
+
+    for (int i = 0; i < n; i++)
     {
-        for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
         {
-            for (int j = 0; j < n - 2; j++)
+            for (int d = 0; d < n; d++)
             {
-                if ((s[i][j] == 'x' && s[i][j+1] == 'x' && s[i][j+2] == '.') ||
-                    (s[i][j] == 'x' && s[i][j+1] == '.' && s[i][j+2] == 'x') ||
-                    (s[i][j] == '.' && s[i][j+1] == 'x' && s[i][j+2] == 'x') 
-                    )
+                int x1 = i;
+                int y1 = j;
+
+                int x2 = i + dx[d];
+                int y2 = j + dy[d];
+
+                int x3 = i + 2 * dx[d];
+                int y3 = j  + 2 * dy[d];
+
+                if (x3 < 0 || x3 >= 4 || y3 < 0 || y3 >= 4)
                 {
-                    flag = 1;
-                    break;
+                    continue;
+                }
+
+                if (valid(s[x1][y1], s[x2][y2], s[x3][y3]))
+                {
+                    printf("YES\n");
+                    return ;
                 }
             }
         }
-    }
+    }        
 
-    // vertical
-    if (!flag)
-    {
-        for (int i = 0; i < n - 2; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if ((s[i][j] == 'x' && s[i+1][j] == 'x' && s[i + 2][j] == '.') ||
-                    (s[i][j] == '.' && s[i+1][j] == 'x' && s[i + 2][j] == 'x') ||
-                    (s[i][j] == 'x' && s[i+1][j] == '.' && s[i + 2][j] == 'x')
-                   )
-                {
-                    flag = 2;
-                    break;
-                }
-            }
-        }
-    }
-
-    // left diagonal
-    if (!flag)
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = n - 1; j >= 0; j--)
-            {
-                if ((i + 1) < n && (i + 2) < n && (j - 1) >= 0 && (j- 2) >= 0 && 
-                    ((s[i][j] == 'x' && s[i + 1][j - 1] == 'x' && s[i + 2][j - 2] == '.') ||
-                     (s[i][j] == 'x' && s[i + 1][j - 1] == '.' && s[i + 2][j - 2] == 'x') ||
-                     (s[i][j] == '.' && s[i + 1][j - 1] == 'x' && s[i + 2][j - 2] == 'x'))
-                    )
-                {
-                    flag = 3;
-                    break;
-                }
-            }
-        }
-    }
-
-    // right diagonal
-    if (!flag)
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if ((i + 1) < n && (i + 2) < n && (j + 1) < n && (j+ 2) < n && 
-                    ((s[i][j] == 'x' && s[i + 1][j + 1] == 'x' && s[i + 2][j + 2] == '.') ||
-                     (s[i][j] == 'x' && s[i + 1][j + 1] == '.' && s[i + 2][j + 2] == 'x') ||
-                     (s[i][j] == '.' && s[i + 1][j + 1] == 'x' && s[i + 2][j + 2] == 'x'))
-                    )
-                {
-                    flag = 4;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (flag)
-    {
-        printf("YES\n");
-    }
-    else
-    {
-        printf("NO\n");
-    }
+    printf("NO\n");
 }
+
 
 int main()
 {
