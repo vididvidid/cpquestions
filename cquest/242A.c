@@ -41,7 +41,8 @@ void solve()
 
     int arr[100000];
     int idx = 0;
-    for (int i = a + 1; i <= x; i++)
+    int s = (a > b) ? (a) : a + 1;
+    for (int i = s; i <= x; i++)
     {
         for (int j = b; j <= y; j++)
         {
