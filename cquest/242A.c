@@ -39,22 +39,25 @@ void solve()
     int x, y, a, b;
     scanf("%d %d %d %d", &x, &y, &a, &b);
 
-    int v = (x - a);
-    int p = (y - b + 1);
-    int comm = MAX(0, (MIN(x,y)) - (MAX(a + 1, b)) + 1);
-
-    int n = v * p - comm;
-    printf("%d\n",n);
-
+    int arr[100000];
+    int idx = 0;
     for (int i = a + 1; i <= x; i++)
     {
         for (int j = b; j <= y; j++)
         {
-            if (i != j)
+            if (i != j && i > j)
             {
-                printf("%d %d\n",i, j);
+                arr[idx++] = i * 10 + j;
             }
         }
+    }
+
+    printf("%d\n",idx);
+    for (int i = 0; i < idx; i++)
+    {
+        int l = arr[i] % 10;
+        int r = arr[i] / 10;
+        printf("%d %d\n",r, l);
     }
 }
 
