@@ -39,7 +39,6 @@ void solve()
     int x, y, a, b;
     scanf("%d %d %d %d", &x, &y, &a, &b);
 
-    int arr[100000];
     int idx = 0;
     int s = (a > b) ? (a) : a + 1;
     for (int i = s; i <= x; i++)
@@ -48,17 +47,28 @@ void solve()
         {
             if (i != j && i > j)
             {
-                arr[idx++] = i * 10 + j;
+                idx++;
+                /* arr[i] = j; */
             }
         }
     }
 
     printf("%d\n",idx);
-    for (int i = 0; i < idx; i++)
+    /* for (int i = 0; i < 10000; i++) */
+    /* { */
+    /*     if (arr[i]) */
+    /*     printf("%d %d\n",i, arr[i]); */
+    /* } */
+
+    for (int i = s; i <= x; i++)
     {
-        int l = arr[i] % 10;
-        int r = arr[i] / 10;
-        printf("%d %d\n",r, l);
+        for (int j = b; j <= y; j++)
+        {
+            if (i != j && i > j)
+            {
+                printf("%d %d\n",i, j);
+            }
+        }
     }
 }
 
