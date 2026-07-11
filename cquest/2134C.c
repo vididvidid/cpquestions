@@ -23,45 +23,38 @@ void solve()
 {
     int n;
     scanf("%lld", &n);
-    int arr[n + 1];
+    int arr[n + 2];
     arr[0] = 0;
-    int me = LLONG_MAX;
-    int se = 0, so = 0;
+    arr[n + 1] = 0;
+
     for (int i = 1; i <= n; i++)
     {
         scanf("%lld", &arr[i]);
-        if (i % 2 == 0)
+    }
+
+    int ans = 0;
+
+    for (int i = 2; i <= n; i += 2)
+    {
+        int left = arr[i - 1];
+        int right = (i + 1 <= n) ? arr[i + 1] : 0;
+        int val = arr[i];
+
+        int extra = (left + right) - val;
+
+        if (extra > 0)
         {
-            se += arr[i];
-            if (me > arr[i])
+            ans += extra;
+
+            int rv = (right < extra) ? right : extra;
+            if (i + 1 <= n)
             {
-                me = arr[i];
+                arr[i + 1] -= rv;
             }
-        }
-        else {
-            so += arr[i];
         }
     }
 
-    int cn = 0;
-    for (int i = 1; i <= n; i++)
-    {
-        if (i % 2 != 0)
-        {
-            if (arr[i] > me)
-            {
-                cn += ABS(arr[i] - me);
-            }
-        }
-    }
-    
-    int ans = 0;
-    so -= cn;
-    if (so > se)
-    {
-        ans += ABS(so - se);
-    }
-    printf("%lld\n",ans + cn);
+    printf("%lld\n", ans);
 }
 
 int main()
