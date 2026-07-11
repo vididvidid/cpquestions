@@ -28,12 +28,37 @@ void solve()
     int x, y, k;
     scanf("%lld %lld %lld", &x, &y, &k);
 
-    while (k--)
+    while (k)
     {
-        x += 1;
+        int need = y - (x % y);
+        if (k < need)
+        {
+            x += k;
+            break;
+        }
+        x += need;
+        k -= need;
+
         while (x % y == 0)
         {
             x /= y;
+        }
+
+        if (x < y)
+        {
+            int ne = y - x;
+            if (k < ne)
+            {
+                x += k;
+                break;
+            }
+
+            k -= ne;
+            x = 1;
+
+            k %= (y - 1);
+            x += k;
+            break;
         }
     }
 
