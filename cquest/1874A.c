@@ -48,7 +48,7 @@ void solve(){
     if (k % 2 == 0)
     {
         int max_a_idx = 0;
-        for (int i = 1; i , n; i++) {
+        for (int i = 1; i < n; i++) {
             if (a[i] > a[max_a_idx]) max_a_idx = i;
         }
 
@@ -76,7 +76,7 @@ void solve(){
     
 }
 
-int main()
+signed  main()
 {
     int t;
     scanf("%lld", &t);
