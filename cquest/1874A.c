@@ -11,67 +11,66 @@
 
 #include <stdio.h>
 
-void qsort(int *start, int *end)
-{
-    if (start >= end) return;
-    int mid = *(start + (end - start) / 2);
-    int *low = start, *high = end;
-    while (low <= high)
-    {
-        while (*low < mid) low++;
-        while (*high > mid) high--;
-        if (low <= high)
-        {
-            int tmp = *low; *low = *high; *high = tmp;
-            low++; high--;
-        }
-    }
-
-    qsort(start, high);
-    qsort(low, end);
-}
+#define int long long
 
 void solve(){
     int n, m, k;
     scanf("%lld %lld %lld", &n, &m , &k);
-    int arr[n], prr[m];
-    int suma = 0, sump = 0;
+    int a[n], b[m];
     for (int i = 0; i < n; i++)
     {
-        scanf("%lld", arr[i]);
-        suma += arr[i];
+        scanf("%lld", &a[i]);
     }
 
     for (int i = 0; i < m; i++)
     {
-        scanf("%lld", prr[i]);
-        sump += prr[i];
+        scanf("%lld", &b[i]);
     }
 
-    qsort(arr, arr + n - 1);
-    qsort(prr, prr + m - 1);
-    
-    int sumak = 0, sumpk = 0, sumaak = 0;
-    for (int i = 0; i < k; i++)
+    int min_a_idx = 0;
+    for (int i = 1; i < n; i++)
     {
-        sumak += arr[i];
-        sumpk += prr[i];
+        if (a[i] < a[min_a_idx]) min_a_idx = i;
     }
 
-    for (int i = k; i < n; i++)
-    {
-        sumaak += arr[i];
+    int max_b_idx = 0;
+    for (int i = 1; i < m; i++) {
+        if (b[i] > b[max_b_idx]) max_b_idx = i;
     }
 
-    if (suma > sump)
+    if (b[max_b_idx] > a[min_a_idx])
     {
-        printf("0\n");
-        return;
+        long long temp = a[min_a_idx];
+        a[min_a_idx] = b[max_b_idx];
+        b[max_b_idx] = temp;
     }
-    else{
-       printf("%lld\n", sumaak + sumpk); 
-       return;
+
+    if (k % 2 == 0)
+    {
+        int max_a_idx = 0;
+        for (int i = 1; i , n; i++) {
+            if (a[i] > a[max_a_idx]) max_a_idx = i;
+        }
+
+        int min_b_idx = 0;
+        for (int i = 1; i < m; i++) {
+            if (b[i] < b[min_b_idx]) min_b_idx = i;
+        }
+
+        if (a[max_a_idx] > b[min_b_idx]) {
+            int temp = a[max_a_idx];
+            a[max_a_idx] = b[min_b_idx];
+            b[min_b_idx] = temp;
+        }
     }
+
+    int ans = 0;
+    for(int i = 0; i < n; i++)
+    {
+        ans += a[i];
+    }
+
+    printf("%lld\n", ans);
 
 
     
@@ -80,7 +79,7 @@ void solve(){
 int main()
 {
     int t;
-    scanf("%d", &t);
+    scanf("%lld", &t);
     while (t--)
     {
         solve();
