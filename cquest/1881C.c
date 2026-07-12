@@ -25,6 +25,10 @@
  * find majority.. in those.. 
  * if all character frequency is 1 than add 3 for each index. otherwise n - freq
  * that is the number. 
+ *
+ * what i was wrong about..
+ * -> i can only increament it i was decrementing it by using cn..
+ * -> target must be the largest character 
  */
 
 #include <stdio.h>
@@ -46,7 +50,7 @@ void solve()
     // iterate to outer shells
     for (int i = 0, j = n - 1; i < n && i < j && j > i && j >= 0; i++, j--)
     {
-       printf("\ni: %d j: %d\n",i,j); 
+       /* printf("\ni: %d j: %d\n",i,j); */ 
 
        int len = j - i + 1;
        char top[len + 1];
@@ -61,36 +65,21 @@ void solve()
            left[k] = s[j - k][i];
            right[k] = s[i + k][j];
 
-           printf("%c %c %c %c\n",top[k],bottom[k],left[k],right[k]);
+           /* printf("%c %c %c %c\n",top[k],bottom[k],left[k],right[k]); */
        }
 
        for (int k = 0; k < len - 1; k++)
        {
-           int freq[26] = {0};
 
-           freq[top[k]-'a']++;
-           freq[bottom[k] - 'a']++;
-           freq[left[k] - 'a']++;
-           freq[right[k] - 'a']++;
-            
-           printf("Freq:\n");
-           int cn = 0, mx = -1, idx = 0;
-           for (int p = 0; p < 26; p++)
-           {
-               printf("%d ",freq[p]);
-               int t = MAX(mx, freq[p]);
-               
-               if (t > mx)
-               {
-                   mx = t;
-                   cn = freq[p];
-                   idx = p;
-               }
-           }
-           printf("\n");
+           char mxchar = top[k];
+           if (bottom[k] > mxchar) mxchar = bottom[k];
+           if (left[k] > mxchar) mxchar = left[k];
+           if (right[k] > mxchar) mxchar = right[k];
 
-           ans += (4 - cn);
-
+           ans += (mxchar - top[k]);
+           ans += (mxchar - bottom[k]);
+           ans += (mxchar - left[k]);
+           ans += (mxchar - right[k]);
        }
        
     }
