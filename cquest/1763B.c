@@ -35,59 +35,76 @@
 
 #define int long long
 
-void sort(int *start, int *end)
+typedef struct {
+    int h;
+    int p;
+} mnstr;
+
+void sort(mnstr *arr, int start, int end)
 {
     if (start >= end) return;
-    int mid = *(start + (end - start) / 2);
-    int *low = start, *high = end;
+    int mid = arr[start + (end - start) / 2].p;
+    int low = start, high = end;
     while (low <= high)
     {
-        while (*low < mid) low++;
-        while (*high > mid) high--;
+        while (arr[low].p < mid) low++;
+        while (arr[high].p > mid) high--;
         if (low <= high)
         {
-            int tmp = *low; *low = *high; *high = tmp;
-            low++; high--;
+            mnstr tmp = arr[low];
+            arr[low] = arr[high];
+            arr[high] = tmp;
+            low++;
+            high--;
         }
     }
 
-    sort(start, high);
-    sort(low, end);
+    sort(arr, start, high);
+    sort(arr, low, end);
 }
+
 
 void solve()
 {
     int n, k;
     scanf("%lld %lld", &n, &k);
 
-    int h[n], p[n];
+    mnstr mrr[n];
     for (int i = 0; i < n; i++)
     {
-        scanf("%lld", &h[i]);
+        scanf("%lld", &mrr[i].h);
     }
     for (int i = 0; i < n; i++)
     {
-        scanf("%lld", &p[i]);
+        scanf("%lld", &mrr[i].p);
     }
 
-    sort(p, p + n - 1);
-    sort(h, h + n - 1);
-
-
-    int dmg = k;
-    for (int i = 0; i < n; i++)
+    sort(mrr, 0, n - 1);
+    
+    int dmg = 0, idx = 0;
+    while (k > 0 && idx < n)
     {
-       dmg += (k - p[i]);
+        dmg += k;
+
+        while (idx < n && mrr[idx].h <= dmg) 
+        {
+            idx++;
+        }
+
+        if (idx < n)
+        {
+            k -= mrr[idx].p;
+        }
     }
 
-    if (h[n - 1] > dmg)
-    {
-        printf("NO\n");
+    if (idx == n) {
+        printf("YES\n");
     }
     else
     {
-        printf("YES\n");
+       printf("NO\n");
     }
+
 }
 
 signed main()
