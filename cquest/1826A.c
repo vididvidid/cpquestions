@@ -5,60 +5,48 @@
  */
 
 /*
+ * you are given an array L of size n. Find any integer x belongs [0,n] 
+ * such that exactly x elements are striclty greater than x:
+ *      sum(i = 1... n)(li > x) = x
+ *  if no such x exists, output -1. 
  *
+ *  Because n <= 100, check all x in O(n^2) or O(nlogn) after sorting.
  *
- * if all same and > 0 => -1
- * if all same and == 0 => 0
- * if all not same return minimum 
  *
  */
 
 #include <stdio.h>
-
-#define MIN(a,b) (a)<(b)?(a):(b)
 
 void solve()
 {
     int n;
     scanf("%d", &n);
     int arr[n];
-    int same = 0, mn = 0;
     for (int i = 0; i < n; i++)
     {
         scanf("%d", &arr[i]);
-        if (i > 0)
+    }
+    
+    for (int i = 0; i <= n; i++)
+    {
+        int liar = 0;
+
+        for (int j = 0; j < n; j++)
         {
-            if (arr[i] == arr[i - 1])
+            if (arr[j] > i)
             {
-                same = 1;
+                liar++;
             }
-            else
-            {
-                same = 0;
-            }
-            mn = MIN(mn, arr[i]);
-        }
-        else
+        }        
+
+        if (liar == i)
         {
-            mn = arr[0];
+            printf("%d\n",i);
+            return;
         }
     }
 
-    if (same || n == 1)
-    {
-        if (arr[0] == 0)
-        {
-            printf("0\n");
-        }
-        else
-        {
-            printf("-1\n");
-        }
-    }
-    else
-    {
-        printf("%d\n",mn);
-    }
+    printf("-1\n");
 }
 
 
