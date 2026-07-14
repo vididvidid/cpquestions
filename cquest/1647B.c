@@ -98,25 +98,17 @@ void solve()
     }
     else
     {
-        for (int i = 0; i < n - 2; i++)
+        for (int i = 0; i < n - 1; i++)
         {
-            for (int j = 0; j < m - 2; j++)
+            for (int j = 0; j < m - 1; j++)
             {
-                int one = 0, zero = 0;
-                for (int p = i; p <= i + 2; p++)
-                {
-                    for (int q = j; q <= j + 2; q++)
-                    {
-                        if (arr[p][q] == 1) one++;
-                        else zero++;
-                    }
-                }
-
-                if (one == 3 && zero == 1)
-                {
-                    printf("NO\n");
-                    return;
-                }
+               int sum = arr[i][j] + arr[i + 1][j] +
+                         arr[i][j + 1] + arr[i + 1][j + 1];
+               if (sum == 3)
+               {
+                   printf("NO\n");
+                   return;
+               }
             }
         }
         printf("YES\n");
