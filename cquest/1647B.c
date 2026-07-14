@@ -86,7 +86,9 @@ void solve()
     {
         for (int j = 0; j < m; j++)
         {
-            scanf("%d", &arr[i][j]);
+            char ch;
+            scanf(" %c", &ch);
+            arr[i][j] = ch - '0';
         }
     }
 
