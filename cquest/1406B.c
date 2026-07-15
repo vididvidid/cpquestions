@@ -44,7 +44,7 @@
 #include <stdio.h>
 
 #define int long long
-#define MAX(a,b) (a)>(b)?(a):(b)
+#define MAX(a,b) ((a)>(b)?(a):(b))
 
 void sort(int arr[], int start, int end)
 {
@@ -55,7 +55,7 @@ void sort(int arr[], int start, int end)
     {
         while (arr[low] < mid) low++;
         while (arr[high] > mid) high--;
-        while (low <= high)
+        if (low <= high)
         {
             int tmp = arr[low]; arr[low] = arr[high]; arr[high] = tmp;
             low++; high--;
