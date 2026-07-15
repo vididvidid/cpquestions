@@ -51,7 +51,7 @@ void sort(int arr[], int start, int end)
     if (start >= end) return;
     int mid = arr[(start + (end - start) / 2)];
     int low = start, high = end;
-    while (low < end)
+    while (low <= high)
     {
         while (arr[low] < mid) low++;
         while (arr[high] > mid) high--;
