@@ -32,9 +32,19 @@
  *
  *  but if all negative than print multiple of all if all positive than print
  *  all.
+ * --------------------------------------------------------------------------
+ *  Observation:
+ *  because negative number will come in pair.. 
+ *  so after sort
+ *  either we will take all right 5 number
+ *  or 2 left and 3 right number
+ *  or 4 left and 1 right number.. 
  *
  */
 #include <stdio.h>
+
+#define int long long
+#define MAX(a,b) (a)>(b)?(a):(b)
 
 void sort(int arr[], int start, int end)
 {
@@ -59,47 +69,27 @@ void sort(int arr[], int start, int end)
 void solve()
 {
     int n;
-    scanf("%d", &n);
-    int nrr[n], arr[n];
-    int neg = 0, pos = 0, ans = 0;
+    scanf("%lld", &n);
+    int arr[n];
     for (int i = 0; i < n; i++)
     {
-        int num;
-        scanf("%d", &num);
-        if (num < 0)
-        {
-            nrr[neg++] = num;
-        }
-        else
-        {
-            arr[pos++] = num;
-        }
+        scanf("%lld", &arr[i]);
     }
 
-    if ((neg == 5 && pos == 0)|| (pos == 5 && neg == 0))
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            if (neg > 0)
-            {
-                ans *= nrr[i];
-            }
-            else
-            {
-                ans *= arr[i];
-            }
-        }
+    sort(arr, 0, n - 1);
 
-        printf("%d\n",ans);
-    }
+    int ans1 = arr[n - 1] * arr[n - 2] * arr[n - 3] * arr[n - 4] * arr[n - 5];
+    int ans2 = arr[0] * arr[1] * arr[n - 1] * arr[n - 2] * arr[n - 3];
+    int ans3 = arr[0] * arr[1] * arr[2] * arr[3] * arr[n - 1];
 
-
+    int ans = MAX(ans1, (MAX(ans2, ans3)));
+    printf("%lld\n", ans);    
 }
 
 signed main()
 {
     int t;
-    scanf("%d", &t);
+    scanf("%lld", &t);
     while (t--)
     {
         solve();
