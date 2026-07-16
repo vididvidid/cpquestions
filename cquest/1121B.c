@@ -24,33 +24,21 @@ void solve()
     {
         scanf("%d", &arr[i]);
     }
-
+    int freq[200004] = {0};
     int cn = 0;
     for (int i = 0; i < n - 1; i++)
     {
         for (int j = i + 1; j < n; j++)
         {
-            int tcn = 0;
-            int sum = arr[i] + arr[j];
-            for (int p = 0; p < n; p++)
-            {
-                for (int q = p + 1; q < n; q++)
-                {
-                    if (p != i && p != j && q != i && q != j)
-                    {
-                        int tsum = arr[q] + arr[p];
-                        if (tsum == sum)
-                        {
-                            tcn++;
-                        }
-                    }
-                }
-            }
-            cn = MAX(cn, tcn);
+            freq[arr[i] + arr[j]]++;
         }
     }
-
-    printf("%d\n",cn + 1);
+    
+    for (int i = 0; i < 200004; i++)
+    {
+        cn = MAX(cn, freq[i]);
+    }
+    printf("%d\n",cn );
 }
 
 int main()
