@@ -39,15 +39,18 @@ void solve()
         }
     }
 
-    if ((odd % 2 != 0))
+    int even = n - odd;
+
+    for (int k = 1; k <= x; k += 2)
     {
-        printf("Yes\n");
-    }
-    else
-    {
-        printf("No\n");
+        if (k <= odd && x - k <= even)
+        {
+            printf("Yes\n");
+            return;
+        }
     }
 
+    printf("No\n");
 }
 
 int main()
