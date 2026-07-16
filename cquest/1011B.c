@@ -14,4 +14,46 @@
  * n < m -> 0
  * n == m -> 1
  * n > m :
- *  
+ * 
+ */
+
+#include <stdio.h>
+
+void solve()
+{
+    int n, m;
+    scanf("%d %d", &n, &m);
+
+    int count[101] = {0};
+    for (int i = 0; i < m; i++)
+    {
+        int t;
+        scanf("%d", &t);
+        count[t]++;
+    }
+
+    for (int d = m; d >= 1; d--)
+    {
+        int eat = 0;
+
+        for (int t = 1; t <= 100; t++)
+        {
+            eat += count[t]/d;
+        }
+
+        if (eat >= n)
+        {
+            printf("%d\n",d);
+            return;
+        }
+    }
+
+    printf("0\n");
+}
+
+int main()
+{
+    solve();
+    return 0;
+
+}
