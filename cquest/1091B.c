@@ -35,57 +35,25 @@ void solve()
 {
     int n;
     scanf("%d", &n);
-    cord loc[n], clue[n];
-    cord pair[n * n];
+
+    long long sum_x = 0, sum_y = 0;
+    int x, y;
+
     for (int i = 0; i < n; i++)
     {
-        scanf("%d %d", &loc[i].x , &loc[i].y);
-    }
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d %d", &clue[i].x, &clue[i].y);
+        scanf("%d %d", &x, &y);
+        sum_x += x;
+        sum_y += y;
     }
 
-    int idx = 0;
     for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < n; j++)
-        {
-            int tx = loc[i].x + clue[j].x;
-            int ty = loc[i].y + clue[j].y;
-            int flag = 0;
-            for (int k = 0; k < idx; k++)
-            {
-                if (pair[k].x == tx && pair[k].y == ty)
-                {
-                    pair[k].freq++;
-                    flag = 1;
-                    break;
-                }
-            }
-            if (!flag)
-            {
-                pair[idx].x = loc[i].x + clue[j].x;
-                pair[idx].y = loc[i].y + clue[j].y;
-                pair[idx].freq = 1;
-                idx++;
-            }
-        }
+        scanf("%d %d", &x, &y);
+        sum_x += x;
+        sum_y += y;
     }
 
-    int mx = -1;
-    for (int i = 0; i < idx; i++)
-    {
-        mx = MAX(mx, pair[i].freq);
-    }
-    for (int i = 0; i < idx; i++)
-    {
-        if (pair[i].freq == mx)
-        {
-            printf("%d %d\n",pair[i].x, pair[i].y);
-            return;
-        }
-    }
+    printf("%lld %lld\n", sum_x/n, sum_y/n);
 }
 
 int main()
