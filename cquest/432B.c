@@ -36,7 +36,7 @@ void solve()
     for (int i = 0; i < n; i++)
     {
         int h = (n - 1) + freq[y[i]];
-        int a = (n - 1) - freq[x[i]];
+        int a = (n - 1) - freq[y[i]];
         printf("%d %d\n",h, a);
     }
 
