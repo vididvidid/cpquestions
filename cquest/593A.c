@@ -19,7 +19,7 @@ void solve()
 {
     int n;
     scanf("%d", &n);
-    char s[n][101];
+    char s[n][1005];
     int arr[n][27], freq[26] = {0};
     for (int i = 0; i < n; i++)
     {
