@@ -19,25 +19,6 @@
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #define ABS(a) ((a)>0?(a):-1*(a))
 
-void sort(int arr[], int start, int end)
-{
-    if (start >= end) return;
-    int mid = arr[(start + (end - start) / 2)];
-    int low = start, high = end;
-    while (low <= high)
-    {
-        while (arr[low] > mid) low++;
-        while (arr[high] < mid) high--;
-        if (low <= high)
-        {
-            int tmp = arr[low]; arr[low] = arr[high]; arr[high] = tmp;
-            low++; high--;
-        }
-    }
-
-    sort(arr , start, high);
-    sort(arr , low, end);
-}
 
 void solve()
 {
@@ -49,17 +30,19 @@ void solve()
         scanf("%d",&arr[i]);
     }
 
-    sort(arr, 0, n - 1);
-
-    int ans = INT_MAX;
-    int t1 = 0, t2 = 0;
-    for (int i = 0; i <n; i++)
+    int ans = 360;
+    for (int i = 0; i < n; i++)
     {
-        if (t1 <= t2) t1 += arr[i];
-        else t2 += arr[i];
+       int sum = 0;
+       for (int j = 0; j < n; j++)
+       {
+           sum += arr[(i + j) % n];
+           ans = MIN(ans, ABS(360 - 2 * sum));
+       }
     }
 
-    printf("%d\n",ABS(t1-t2));
+    ans = MIN(ans, 360);
+    printf("%d\n", ans);
 }
 
 int main()
