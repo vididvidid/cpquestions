@@ -48,47 +48,50 @@ void solve()
     int ans = 0;
     for (int i = 0; i < n; i++)
     {
-        int freq[26] = {0};
-        if (arr[i][26] > 0 && arr[i][26] < 3)
+        for (int j = 0; j < n; j++)
         {
-            for (int j = 0; j < 26; j++)
-            {
-                freq[j] = arr[i][j];
-            }
+            int allowed[26] = {0};
+            int dc = 0;
 
-            for ( int j = 0; j < n; j++)
+            for (int k = 0; k < 26; k++)
             {
-                if (j != i && arr[j][26] > 0 && arr[j][26] < 3)
+                if (arr[i][k] > 0 || arr[j][k] > 0)
                 {
-
-                    int ck = 0;
-                    for (int k = 0; k < 26; k++)
-                    {
-                        if (freq[k] > 0 || arr[j][k] > 0)
-                        {
-                            ck++;
-                        }
-                    }
-                    if (ck <= 2)
-                    {
-
-                        for (int k = 0; k < 26; k++)
-                        {
-                            freq[k] += arr[j][k];
-                        }
-                    }
+                    allowed[k] = 1;
+                    dc++;
                 }
             }
 
-            int sum = 0;
-            for (int j = 0; j < 26; j++)
+            if (dc <= 2)
             {
-                sum += freq[j];
+                int sum = 0;
+                for (int m = 0; m < n; m++)
+                {
+                    if (arr[m][26] > 0 && arr[m][26] <= 2)
+                    {
+                        int valid = 1;
+                        for (int k = 0; k < 26; k++)
+                        {
+                            if (arr[m][k] > 0 && allowed[k] == 0)
+                            {
+                                valid = 0;
+                                break;
+                            }
+                        }
+
+                        if (valid)
+                        {
+                            for (int k = 0; k < 26; k++)
+                            {
+                                sum += arr[m][k];
+                            }
+                        }
+                    }
+                }
+                ans = MAX(ans, sum);
             }
-            ans = MAX(ans, sum);
         }
     }
-
 
     printf("%d\n",ans);
 
