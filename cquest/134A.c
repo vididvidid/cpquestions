@@ -12,23 +12,22 @@
 
 #define int long long
 
+int arr[200005], prr[200005];
+
 void solve()
 {
     int n;
     scanf("%lld", &n);
     int sum = 0;
-    int arr[n];
     for(int i = 0; i < n; i++)
     {
         scanf("%lld", &arr[i]);
         sum += arr[i];
     }
-    int cn = 0, prr[n];
+    int cn = 0;
     for (int i = 0; i < n; i++)
     {
-        int tsum = sum - arr[i];
-        tsum /= (n - 1);
-        if (tsum == arr[i])
+        if (arr[i] * n == sum)
         {
             prr[cn++] = i;
         }
