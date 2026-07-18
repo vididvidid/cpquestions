@@ -79,11 +79,11 @@ void solve()
     }
 
     int ans = INF;
-    for (int i = 1; i <= 7; i++)
+    for (int i = 0; i <= 7; i++)
     {
-        for (int j = 1; j <= 7; j++)
+        for (int j = 0; j <= 7; j++)
         {
-            for (int k = 1; j <= 7 && k <= 7; k++)
+            for (int k = 0; j <= 7 && k <= 7; k++)
             {
                 if ((i | j | k) == 7) {
                     ans = MIN(ans, mn[i] + mn[j] + mn[k]);
