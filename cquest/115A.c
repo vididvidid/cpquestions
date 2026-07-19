@@ -29,7 +29,7 @@ void solve()
     for (int i = 1; i <= n; i++)
     {
         int depth = 1;
-        int curr = 1;
+        int curr = i;
 
         while (manager[curr] != -1)
         {
