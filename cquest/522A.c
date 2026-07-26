@@ -33,3 +33,9 @@ void solve() {
     
     printf("%d\n", m);
 }
+
+signed main()
+{
+    solve();
+    return 0;
+}
