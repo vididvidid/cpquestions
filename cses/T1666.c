@@ -61,6 +61,21 @@ void solve_list()
         int vertex;
         struct Node* next;
     }
+
+    struct Node* adj[MAXNODE];
+    int visited[MAXNODE];
+    int newCompStart[MAXNODE];
+    int num_node;
+
+    void add_edge(int u, int v)
+    {
+        struct Node* newNodeU = (struct Node*)malloc(sizeof(struct Node));
+        newNodeU->vertex = v;
+        newNodeU->next = adj[u];
+        adj[u] = newNodeU;
+
+        
+    }
 }
 
 void solve_matrix()
