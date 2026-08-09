@@ -13,6 +13,21 @@
  * n, k <= 3 * 10^5 (O(n) or O(nlogn))
  *
  *
+ * ------------------------------------------------------
+ * so first thing is doubling and deleting doesn't make any sense.. 
+ * like if i have a number 2 1 1 2 3 4 4
+ * so after double it is 2 2 1 1 1 2 2 3 3 4 4 4
+ * now after delete it is 2 1 1 2 3 4 4 
+ * so its actually same.. 
+ * so we will do delete than double
+ * which means.. 2 1 1 2 3 4 4
+ * delete things 1 4
+ * double  1 1 4 4 (its different)
+ *
+ * now new array is the number of elements we have.. 
+ * so every time frequency of any elment gets 1 than just check if we
+ * can make it double .. to reach that number or not. 
+ * other wise forgot it.. 
  */
 
 #include <stdio.h>
