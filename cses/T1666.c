@@ -60,7 +60,7 @@ void solve_list()
     struct Node {
         int vertex;
         struct Node* next;
-    }
+    };
 
     struct Node* adj[MAXNODE];
     int visited[MAXNODE];
@@ -74,7 +74,62 @@ void solve_list()
         newNodeU->next = adj[u];
         adj[u] = newNodeU;
 
-        
+        struct Node* newNodeV = (struct Node*)malloc(sizeof(struct Node));
+        newNodeV->vertex = u;
+        newNodeV->next = adj[v];
+        adj[v] = newNodeV;
+    }
+
+    void dfs_list(int node)
+    {
+        visited[node] = 1;
+
+        struct Node* temp = adj[node];
+        while (temp != NULL)
+        {
+            int neighbor = temp->vertex;
+            if(!visited[neighbor]) {
+                dfs_list(neighbor);
+            }
+            
+            temp = temp->next;
+        }
+    }
+
+    int m;
+    scanf("%d %d",&num_node, &m);
+
+    for (int i = 0; i < num_node; i++)
+    {
+        adj[i] = NULL;
+        visited[i] = 0;
+    }
+
+    for (int i = 0; i < m; i++)
+    {
+        int x, y;
+        scanf("%d %d", &x, &y);
+
+        add_edge(x - 1, y - 1);
+    }
+
+    int ans = 0;
+    int idx = 0;
+
+    for (int i = 0; i < num_node; i++)
+    {
+        if (!visited[i])
+        {
+            ans++;
+            newCompStart[idx++] = i + 1;
+            dfs_list(i);
+        }
+    }
+
+    printf("%d\n", ans - 1);
+    for (int i = 1; i < ans; i++)
+    {
+        printf("%d %d\n", newCompStart[i - 1], newCompStart[i]);
     }
 }
 
