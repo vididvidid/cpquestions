@@ -37,7 +37,7 @@ void solve()
 {
     initialize();
     input();
-    logic();
+    eff_logic();
     printf("%d %d\n",l + 1, r + 1);
 }
 
@@ -126,4 +126,35 @@ void logic()
     }
 }
 
+void eff_logic()
+{
+    int best_l = 0, best_r = 0;
+    int min_delta = 0;
 
+    for (int i = 0; i < n; i++)
+    {
+        int current_delta = 0;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[i] > arr[j])
+            {
+                current_delta--;
+
+            }
+            else if (arr[i] < arr[j])
+            {
+                current_delta++;
+            }
+
+            if (current_delta < min_delta)
+            {
+                min_delta = current_delta;
+                best_l = i;
+                best_r = j;
+            }
+        }
+    }
+
+    l = best_l;
+    r = best_r;
+}
