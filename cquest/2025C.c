@@ -3,14 +3,20 @@
  * Author: vididvidid 
  * Created: 2026-08-14 23:00:31
  */
-
 #include <stdio.h>
-#include <stdlib.h>
 
-int a[200005], u[200005], c[200005];
+int a[200005], t_a[200005], u[200005], c[200005];
 
-int cmp(const void *x, const void *y) {
-    return (*(int*)x > *(int*)y) - (*(int*)x < *(int*)y);
+void ms(int l, int r) {
+    if (l >= r) return;
+    int m = l + (r - l) / 2;
+    ms(l, m);
+    ms(m + 1, r);
+    int i = l, j = m + 1, k = l;
+    while (i <= m && j <= r) t_a[k++] = a[i] < a[j] ? a[i++] : a[j++];
+    while (i <= m) t_a[k++] = a[i++];
+    while (j <= r) t_a[k++] = a[j++];
+    for (i = l; i <= r; i++) a[i] = t_a[i];
 }
 
 void solve() {
@@ -20,7 +26,7 @@ void solve() {
         scanf("%d", &a[i]);
     }
     
-    qsort(a, n, sizeof(int), cmp);
+    ms(0, n - 1);
     
     int m = 0;
     for (int i = 0; i < n; i++) {
