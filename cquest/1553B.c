@@ -64,69 +64,57 @@ bool checkLeftString(int curr, int sl)
 
 void solve()
 {
-    char s[510], t[510];
+    char s[510], t[1010];
     scanf("%s %s", s, t);
     int sl = strlen(s);
     int tl = strlen(t);
 
-    for (int i = 0; i < sl; i++)
+    for (int start = 0; start < sl; start++)
     {
-        if (s[i] == t[0])
+        for (int len_right = 0; len_right < tl; len_right++)
         {
-            int chip = 0, first = 1, curr = i, flag = 1;
-            while (chip != (tl - 1))
-            {
-                if (first)
-                {
-                    if (checkRightTarget(chip, tl) &&
-                            checkRightString(curr, sl) &&
-                            s[curr+1] == t[chip+1])
-                    {
-                        /* printf("%c:%c\t",s[curr+1],t[chip+1]); */
-                        curr++;
-                        first = 0;
-                    }
-                    else
-                    {
-                        flag = 0;
-                        break;
-                    }
-                }
-                else
-                {
-                    if (checkRightTarget(chip, tl) &&
-                            checkRightString(curr, sl) &&
-                            s[curr+1] == t[chip+1])
-                    {
-                        /* printf("%c:%c\t",s[curr+1],t[chip+1]); */
-                        curr++;
-                    }
-                    else if (checkLeftTarget(chip, tl) &&
-                            checkLeftString(curr, sl) &&
-                            s[curr-1] == t[chip+1])
-                    {
-                        /* printf("%c:%c\t",s[curr-1],t[chip+1]); */
-                        curr--;
-                    }
-                    else
-                    {
-                        flag = 0;
-                        break;
-                    }
-                }
+            int curr = start;
+            bool possible = true;
 
-                chip++;
+            for (int i = 0; i <= len_right; i++)
+            {
+                if (i == 0)
+                {
+                    if (s[curr] != t[0])
+                    {
+                        possible = false;
+                        break;
+                    }
+                }
+                else {
+                    curr++;
+                    if (curr >= sl || s[curr] != t[i]) 
+                    {
+                        possible = false;
+                        break;
+                    }
+                }
             }
 
-            if (flag)
+            if (!possible) continue;
+
+            for (int i = len_right + 1; i < tl; i++)
             {
+                curr--;
+                if (curr < 0 || s[curr] != t[i]) {
+                    possible = false;
+                    break;
+                }
+            }
+
+            if (possible) {
                 printf("YES\n");
                 return;
             }
         }
     }
+
     printf("NO\n");
-    return;
 }
 
 
