@@ -21,6 +21,25 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+unsigned int seed = 123456789;
+unsigned int xorshift() {
+    seed ^= seed << 13;
+    seed ^= seed >> 17;
+    seed ^= seed << 5;
+    return seed;
+}
+
+void shuffle(int *a, int n)
+{
+    for (int i = n - 1; i > 0; i--)
+    {
+        int j = xorshift() % (i + 1);
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+}
+
 int compare (const void *a, const void *b) 
 {
     int val1 = *(const int *)a;
@@ -65,7 +84,8 @@ void solve()
     {
         scanf("%d", &a[i]);
     }
-
+    
+    shuffle(a,n);
     qsort(a, n, sizeof(int), compare);
     
     bool good[n];
