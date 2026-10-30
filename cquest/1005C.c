@@ -67,25 +67,63 @@ void solve()
     }
 
     qsort(a, n, sizeof(int), compare);
-
-    int remove_count = 0;
+    
+    bool good[n];
 
     for (int i = 0; i < n; i++)
     {
-        bool found_pair = false;
-        for (int d = 0; d <= 31; d++)
-        {
-            long long target = (1LL << d) - a[i];
-            if (target <= 0) continue;
+        good[i] = false;
+    }
 
-            if (has_pair(a, n, i, target)) 
+    for (int d = 1; d <= 31; d++)
+    {
+        long long S = 1LL << d;
+        int left = 0, right = n - 1;
+
+        while (left < right) 
+        {
+            long long sum = (long long)a[left] + a[right];
+
+            if (sum == S) 
             {
-                found_pair = true;
-                break;
+                int l_val = a[left];
+                int r_val = a[right];
+
+                if (l_val == r_val) 
+                {
+                    for (int k = left; k <= right; k++)
+                    {
+                        good[k] = true;
+                    }
+
+                    break;
+                } else 
+                {
+                    while (left < n && a[left] == l_val)
+                    {
+                        good[left] = true;
+                        left++;
+                    }
+
+                    while (right >= 0 && a[right] == r_val)
+                    {
+                        good[right] = true;
+                        right--;
+                    }
+                }
+            } else if (sum < S) 
+            {
+                left ++;
+            } else {
+                right--;
             }
         }
+    }
 
-        if (!found_pair)
+    int remove_count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (!good[i]) 
         {
             remove_count++;
         }
